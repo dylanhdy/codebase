@@ -5,6 +5,7 @@
 #define MAXN 50
 #define rint register int
 #define LL long long
+#define INF 
 using namespace std;
 
 LL a, b, ans, s[MAXN];
