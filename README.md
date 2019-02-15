@@ -1,2 +1,2 @@
-# Code-For-OI
-存放平时的一些代码
+# OI-Code
+There is some code of mine during the OI learning.
