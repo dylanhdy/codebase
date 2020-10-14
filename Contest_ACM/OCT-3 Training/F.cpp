@@ -50,11 +50,10 @@ int main()
     {
         scanf("%d%d", &r, &c);
         getchar();
+        for(int i=1; i<=4*r+3; ++i) gets(map[i]);
         for(int i=1; i<=4*r+3; ++i)
-            for(int j=1; ; ++j)
+            for(int j=1; j<=6*c+3; ++j)
             {
-                scanf("%c", &map[i][j]);
-                if(map[i][j]=='\n') break;
                 if(map[i][j]=='S') sx=i, sy=j;
                 dis[i][j]=0;
             }
