@@ -6,7 +6,7 @@
 #include <vector>
 #include <map>
 #include <set>
-#define MAXN 200005
+#define MAXN 1000005
 #define INF 0x3f3f3f3f
 #define rint register int
 #define LL long long
@@ -15,7 +15,7 @@ using namespace std;
 
 const double PI=acos(-1);
 
-int n, m, len, len1, len2, pos[MAXN], ans[MAXN];
+int bit, len, len1, len2, pos[MAXN*4], ans[MAXN*4];
 char s1[MAXN], s2[MAXN];
 
 struct CP
@@ -37,25 +37,27 @@ struct CP
     {
         return CP(a.x-b.x, a.y-b.y);
     }
-} a[MAXN], b[MAXN];
+} a[MAXN*4], b[MAXN*4];
 
-void fft(CP a[], int op)
+void fft(CP a[], int n, int op)
 {
     for(int i=0; i<n; ++i)
         if(i<pos[i]) swap(a[i], a[pos[i]]);
     for(int i=1; i<n; i<<=1)
     {
-        CP omg(cos(PI/i), op*sin(PI/i));
+        CP wn(cos(PI/i), op*sin(PI/i));
         for(int j=0; j<n; j+=(i<<1))
         {
-            CP t(1, 0);
-            for(int k=0; k<i; ++k, t=t*omg)
+            CP w(1, 0);
+            for(int k=0; k<i; ++k, w=w*wn)
             {
-                CP x=a[j+k], y=t*a[j+k+i];
+                CP x=a[j+k], y=w*a[j+k+i];
                 a[j+k]=x+y; a[j+k+i]=x-y;
             }
         }
     }
+    if(op>0) return;
+    for(int i=0; i<n; ++i) a[i].x/=n;
 }
 
 int main()
@@ -65,14 +67,14 @@ int main()
     len2=strlen(s2);
     for(int i=0; i<len1; ++i) a[i].x=s1[len1-1-i]-'0';
     for(int i=0; i<len2; ++i) b[i].x=s2[len2-1-i]-'0';
-    for(n=1; n<len1+len2; n<<=1) m++;
-    for(int i=0; i<=n; ++i) pos[i]=(pos[i>>1]>>1)|((i&1)<<(m-1));
-    fft(a, 1), fft(b, 1);
-    for(int i=0; i<n; ++i) a[i]=a[i]*b[i];
-    fft(a, -1);
-    for(int i=0; i<n; ++i)
+    while((1<<bit)<len1+len2) bit++;
+    for(int i=0; i<(1<<bit); ++i) pos[i]=(pos[i>>1]>>1)|((i&1)<<(bit-1));
+    fft(a, 1<<bit, 1), fft(b, 1<<bit, 1);
+    for(int i=0; i<(1<<bit); ++i) a[i]=a[i]*b[i];
+    fft(a, 1<<bit, -1);
+    for(int i=0; i<(1<<bit); ++i)
     {
-        ans[i]+=(int)(a[i].x/n+0.5);
+        ans[i]+=(int)(a[i].x+0.5);
         ans[i+1]+=ans[i]/10;
         ans[i]%=10;
     }
