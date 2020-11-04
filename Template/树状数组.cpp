@@ -7,7 +7,7 @@
 #include <vector>
 #define LL long long
 #define LD long double
-#define MAXN
+#define MAXN 100005
 #define MAXM
 #define P
 #define INF 0x3f3f3f3f

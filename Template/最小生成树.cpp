@@ -6,8 +6,8 @@
 #include <queue>
 #define LL long long
 #define LD long double
-#define MAXN 
-#define MAXM
+#define MAXN 100005
+#define MAXM 100005
 #define P
 #define INF 0x3f3f3f3f
 using namespace std;

@@ -7,7 +7,7 @@
 #include <vector>
 #define LL long long
 #define LD long double
-#define MAXN
+#define MAXN 1000005
 #define MAXM
 #define P
 #define INF 0x3f3f3f3f
@@ -16,7 +16,7 @@ using namespace std;
 int len, tot=1, last=1, b[MAXN], id[MAXN*2];
 char s[MAXN];
 
-struct State {int len, fa, nxt[26];} a[MAXN*2];
+struct State {int len, fa, val, nxt[26];} a[MAXN*2];
 
 void insert(int ch)
 {
