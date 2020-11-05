@@ -49,7 +49,7 @@ int lca(int x, int y)
 
 int main()
 {
-    scanf("%d%d%d", &n, &m);
+    scanf("%d%d", &n, &m);
     for(int i=1; i<n; ++i)
     {
         int x, y;
