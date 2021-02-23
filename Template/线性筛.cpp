@@ -20,7 +20,7 @@ void sieve(int lim)
 {
     for(int i=2; i<=lim; ++i)
     {
-        if(!vis[i]) pri[++cnt]=i;
+        if(!vis[i]) pri[++cnt]=i; // phi[i]=i-1, mu[i]=1;
         for(int j=1; j<=cnt && pri[j]*i<=lim; ++j)
         {
             vis[i*pri[j]]=1;
