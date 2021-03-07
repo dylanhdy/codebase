@@ -14,10 +14,10 @@
 #define PB push_back
 #define INF 0x3f3f3f3f
 using namespace std;
-
+ 
 int t, n, k, ans, a[MAXN], b[MAXN], pre[MAXN], nxt[MAXN], pos[MAXN];
 char s[MAXN];
-
+ 
 int main()
 {
     scanf("%d", &t);

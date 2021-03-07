@@ -45,7 +45,7 @@ void dijkstra()
             if(dis[to]>dis[x]+g2[x][i])
             {
                 dis[to]=dis[x]+g2[x][i];
-                if(!vis[to]) q.push(node={to, dis[to]});
+                q.push(node={to, dis[to]});
             }
         }
     }
