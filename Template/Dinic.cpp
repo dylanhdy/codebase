@@ -13,9 +13,13 @@
 #define INF 2147483647
 using namespace std;
 
-int n, m, S, T, cnt=1, maxflow, head[MAXN], cur[MAXN], dis[MAXN];
+int n, m, S, T, cnt=1, head[MAXN], dis[MAXN];
+LL maxflow;
 
-struct Edge {int next, to, flow;} edge[MAXM*2];
+struct Edge {
+    int next, to;
+    LL flow;
+} edge[MAXM*2];
 
 queue<int> q;
 
@@ -29,7 +33,7 @@ inline void addedge(int from, int to, int flow)
 
 bool bfs()
 {
-    for(int i=1; i<=n; ++i) cur[i]=head[i], dis[i]=0;
+    for(int i=1; i<=n; ++i) dis[i]=0;
     dis[S]=1;
     q.push(S);
     while(!q.empty())
@@ -38,7 +42,7 @@ bool bfs()
         for(int i=head[x]; i; i=edge[i].next)
         {
             int to=edge[i].to;
-            if(dis[to] || edge[i].flow<=0) continue;
+            if(dis[to] || !edge[i].flow) continue;
             dis[to]=dis[x]+1;
             q.push(to);
         }
@@ -46,18 +50,19 @@ bool bfs()
     return dis[T]>0;
 }
 
-int dfs(int x, int flow)
+LL dfs(int x, LL flow)
 {
     if(x==T) return flow;
-    int add=0;
-    for(int &i=cur[x]; i; i=edge[i].next)
+    LL add=0;
+    for(int i=head[x]; i && flow; i=edge[i].next)
     {
         int to=edge[i].to;
-        if(dis[to]!=dis[x]+1 || edge[i].flow<=0) continue;
-        int f=dfs(to, min(edge[i].flow, flow-add));
+        if(dis[to]!=dis[x]+1 || !edge[i].flow) continue;
+        LL f=dfs(to, min(edge[i].flow, flow));
         edge[i].flow-=f, edge[i^1].flow+=f;
-        add+=f;
+        add+=f; flow-=f;
     }
+    if(!add) dis[x]=0;
     return add;
 }
 
