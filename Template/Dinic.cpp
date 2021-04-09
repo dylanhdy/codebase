@@ -10,7 +10,7 @@
 #define MAXN 205
 #define MAXM 5005
 #define P
-#define INF 2147483647
+#define INF 1e18
 using namespace std;
 
 int n, m, S, T, cnt=1, head[MAXN], dis[MAXN];
