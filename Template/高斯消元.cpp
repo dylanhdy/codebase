@@ -27,7 +27,7 @@ int main()
         for(int j=n+1; j>=i; --j) a[i][j]/=a[i][i];
         for(int j=1; j<=n; ++j) {
             if(i==j) continue;
-            for(int k=n+1; k>=0; --k) a[j][k]-=a[j][i]*a[i][k];
+            for(int k=n+1; k>=i; --k) a[j][k]-=a[j][i]*a[i][k];
         }
     }
     for(int i=1; i<=n; ++i)
