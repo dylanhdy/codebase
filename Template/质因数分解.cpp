@@ -13,6 +13,7 @@ using namespace std;
 
 const LL base[]={2, 325, 9375, 28178, 450775, 9780504, 1795265022};
 
+int T;
 LL n;
 map<LL, int> mp;
 
@@ -28,16 +29,15 @@ LL ksm(LL x, LL y, LL p)
 
 bool MR(LL x)
 {
-    if(x<=2) return x==2;
-    if(x%2==0) return false;
+    if(x<=2 || !(x%2)) return x==2;
     LL d=x-1, r=0;
-    while(d%2==0) d/=2, r++;
-    for(auto e: base) {
+    while(!(d%2)) d>>=1, r++;
+    for(LL e: base) {
         LL v=ksm(e, d, x);
         if(v<=1 || v==x-1) continue;
         for(int i=0; i<r-1; ++i) {
             v=(I128)v*v%x;
-            if(v==x-1) break;
+            if(v==x-1 || v==1) break;
         }
         if(v!=x-1) return false;
     }
@@ -46,20 +46,15 @@ bool MR(LL x)
 
 LL PR(LL x)
 {
-    if(x==4) return 2;
-    LL l=0, r=0, c=rand()%(x-1)+1, val;
-    while(true) {
-        val=1;
-        for(int i=0; i<128; ++i) {
-            l=((I128)l*l+c)%x;
-            r=((I128)r*r+c)%x, r=((I128)r*r+c)%x;
-            if(l==r || val*abs(l-r)%x==0) break;
-            val=(I128)val*abs(l-r)%x;
-        }
-        LL d=__gcd(val, x);
-        if(d>1) return d;
-        if(l==r) return x;
+    LL l=0, r=0, val=2, tmp;
+    auto f=[x](LL y) {return ((I128)y*y+1)%x;};
+    for(int i=0; ; ++i) {
+        if(!(i%60) && __gcd(val, x)>1) break;
+        if(l==r) l=rand()%(x-1)+1, r=f(l);
+        if(tmp=(I128)val*abs(r-l)%x) val=tmp;
+        l=f(l), r=f(f(r));
     }
+    return __gcd(val, x);
 }
 
 void find(LL x, int num)
@@ -78,8 +73,12 @@ void find(LL x, int num)
 int main()
 {
     srand(time(0));
-    scanf("%lld", &n);
-    find(n, 1);
-    for(auto e: mp) printf("%lld %dn", e.first, e.second);
+    scanf("%d", &T);
+    while(T--) {
+        mp.clear();
+        scanf("%lld", &n);
+        find(n, 1);
+        for(auto e: mp) printf("%lld %d\n", e.first, e.second);
+    }
     return 0;
 }
