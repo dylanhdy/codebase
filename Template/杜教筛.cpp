@@ -46,7 +46,7 @@ LL mus(int x)
     if(x<=5e6) return mu[x];
     if(muf[x]) return muf[x];
     LL sum=1;
-    for(uint l=2, r; l<=x; l=r+1)
+    for(int l=2, r; l<=x; l=r+1)
     {
         r=x/(x/l);
         sum-=1LL*(r-l+1)*mus(x/l);
@@ -60,7 +60,7 @@ LL phis(int x)
     if(x<=5e6) return phi[x];
     if(phif[x]) return phif[x];
     LL sum=1LL*x*(x+1)/2;
-    for(uint l=2, r; l<=x; l=r+1)
+    for(int l=2, r; l<=x; l=r+1)
     {
         r=x/(x/l);
         sum-=1LL*(r-l+1)*phis(x/l);
