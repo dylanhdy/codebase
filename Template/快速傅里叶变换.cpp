@@ -18,24 +18,16 @@ const double PI=acos(-1);
 int bit, len, len1, len2, pos[MAXN*4], ans[MAXN*4];
 char s1[MAXN], s2[MAXN];
 
-struct CP
-{
+struct CP {
     double x, y;
-    CP(double a=0, double b=0)
-    {
-        x=a; y=b;
+    friend CP operator * (CP a, CP b) {
+        return CP{a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x};
     }
-    friend CP operator * (CP a, CP b)
-    {
-        return CP(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x);
+    friend CP operator + (CP a, CP b) {
+        return CP{a.x+b.x, a.y+b.y};
     }
-    friend CP operator + (CP a, CP b)
-    {
-        return CP(a.x+b.x, a.y+b.y);
-    }
-    friend CP operator - (CP a, CP b)
-    {
-        return CP(a.x-b.x, a.y-b.y);
+    friend CP operator - (CP a, CP b) {
+        return CP{a.x-b.x, a.y-b.y};
     }
 } a[MAXN*4], b[MAXN*4];
 
@@ -43,21 +35,18 @@ void fft(CP a[], int n, int op)
 {
     for(int i=0; i<n; ++i)
         if(i<pos[i]) swap(a[i], a[pos[i]]);
-    for(int i=1; i<n; i<<=1)
-    {
-        CP wn(cos(PI/i), op*sin(PI/i));
-        for(int j=0; j<n; j+=(i<<1))
-        {
-            CP w(1, 0);
-            for(int k=0; k<i; ++k, w=w*wn)
-            {
+    for(int i=1; i<n; i<<=1) {
+        CP wn{cos(PI/i), op*sin(PI/i)};
+        for(int j=0; j<n; j+=(i<<1)) {
+            CP w{1, 0};
+            for(int k=0; k<i; ++k, w=w*wn) {
                 CP x=a[j+k], y=w*a[j+k+i];
                 a[j+k]=x+y; a[j+k+i]=x-y;
             }
         }
     }
-    if(op>0) return;
-    for(int i=0; i<n; ++i) a[i].x/=n;
+    if(op==-1)
+        for(int i=0; i<n; ++i) a[i].x/=n;
 }
 
 int main()

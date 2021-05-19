@@ -24,7 +24,7 @@ struct Node
     {
         return x.dis>y.dis;
     }
-} node;
+};
 
 vector<int> g1[MAXN], g2[MAXN];
 priority_queue<Node> q;
@@ -33,7 +33,7 @@ void dijkstra()
 {
     memset(dis, 0x3f, sizeof(dis));
     dis[S]=0;
-    q.push(node={S, 0});
+    q.push(Node{S, 0});
     while(!q.empty())
     {
         int x=q.top().id; q.pop();
@@ -45,7 +45,7 @@ void dijkstra()
             if(dis[to]>dis[x]+g2[x][i])
             {
                 dis[to]=dis[x]+g2[x][i];
-                q.push(node={to, dis[to]});
+                q.push(Node{to, dis[to]});
             }
         }
     }
