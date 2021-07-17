@@ -57,12 +57,12 @@ int main()
     for(int i=0; i<len1; ++i) a[i].x=s1[len1-1-i]-'0';
     for(int i=0; i<len2; ++i) b[i].x=s2[len2-1-i]-'0';
     while((1<<bit)<len1+len2) bit++;
-    for(int i=0; i<(1<<bit); ++i) pos[i]=(pos[i>>1]>>1)|((i&1)<<(bit-1));
+    for(int i=0; i<(1<<bit); ++i)
+        pos[i]=(pos[i>>1]>>1)|((i&1)<<(bit-1));
     fft(a, 1<<bit, 1), fft(b, 1<<bit, 1);
     for(int i=0; i<(1<<bit); ++i) a[i]=a[i]*b[i];
     fft(a, 1<<bit, -1);
-    for(int i=0; i<(1<<bit); ++i)
-    {
+    for(int i=0; i<(1<<bit); ++i) {
         ans[i]+=(int)(a[i].x+0.5);
         ans[i+1]+=ans[i]/10;
         ans[i]%=10;

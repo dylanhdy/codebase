@@ -44,7 +44,6 @@ void ntt(int a[], int n, int op)
     for(int i=0; i<n; ++i) a[i]=1LL*a[i]*inv%P;
 }
 
-
 int main()
 {
     scanf("%d%d", &n, &m);
