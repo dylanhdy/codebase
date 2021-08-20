@@ -10,12 +10,10 @@
 #define INF 0x3f3f3f3f
 #define LL long long
 #define LD long double
-#define P 998244353
-#define G 3
-#define IG 332748118
 using namespace std;
 
 using vi=vector<int>;
+constexpr int P(998244353), G(3), IG(332748118);
 
 inline int add(int x, int y) {return x+y<P?x+y:x+y-P;}
 inline int sub(int x, int y) {return x>=y?x-y:x-y+P;}
@@ -56,16 +54,28 @@ namespace Polynomial {
         }
     }
 
+    vi mul(vi a, vi b)
+    {
+        int n=a.size(), m=b.size();
+        init(n+m-1);
+        a.resize(1<<bit), b.resize(1<<bit);
+        ntt(a, 1), ntt(b, 1);
+        for(int i=0; i<1<<bit; ++i) a[i]=1LL*a[i]*b[i]%P;
+        ntt(a, -1);
+        a.resize(n+m-1);
+        return a;
+    }
+
     vi inverse(vi a)
     {
-        int n=a.size();
+        int n=a.size(), m=(a.size()+1)>>1;
         if(n==1) return {qpow(a[0], P-2)};
-        vi b=inverse(vi(a.begin(), a.begin()+((n+1)>>1)));
+        vi b=inverse(vi(a.begin(), a.begin()+m));
         init(n<<1);
         a.resize(1<<bit), b.resize(1<<bit);
         ntt(a, 1), ntt(b, 1);
         for(int i=0; i<1<<bit; ++i)
-            b[i]=1LL*sub(2, 1LL*a[i]*b[i]%P)*b[i]%P;
+            b[i]=1LL*(2+P-1LL*a[i]*b[i]%P)*b[i]%P;
         ntt(b, -1);
         b.resize(n);
         return b;
@@ -74,14 +84,11 @@ namespace Polynomial {
     vi div(vi a, vi b)
     {
         int n=a.size(), m=b.size();
-        init((n-m+1)<<1);
         reverse(a.begin(), a.end());
         reverse(b.begin(), b.end());
-        a.resize(1<<bit), b.resize(1<<bit);
+        a.resize(n-m+1), b.resize(n-m+1);
         b=inverse(b);
-        ntt(a, 1), ntt(b, 1);
-        for(int i=0; i<1<<bit; ++i) a[i]=1LL*a[i]*b[i]%P;
-        ntt(a, -1);
+        a=mul(a, b);
         a.resize(n-m+1);
         reverse(a.begin(), a.end());
         return a;
@@ -91,11 +98,7 @@ namespace Polynomial {
     {
         int n=a.size(), m=b.size();
         vi c=div(a, b);
-        init(n);
-        b.resize(1<<bit), c.resize(1<<bit);
-        ntt(b, 1), ntt(c, 1);
-        for(int i=0; i<1<<bit; ++i) b[i]=1LL*b[i]*c[i];
-        ntt(b, -1);
+        b=mul(b, c);
         a.resize(m-1);
         for(int i=0; i<m-1; ++i) a[i]=sub(a[i], b[i]);
         return a;
@@ -124,21 +127,16 @@ namespace Polynomial {
     vi ln(vi a)
     {
         int n=a.size();
-        vi b=inverse(a), c=deriv(a);
-        init(n<<1);
-        b.resize(1<<bit), c.resize(1<<bit);
-        ntt(b, 1), ntt(c, 1);
-        for(int i=0; i<1<<bit; ++i) b[i]=1LL*b[i]*c[i]%P;
-        ntt(b, -1);
-        b.resize(n-1);
-        return integ(b);
+        a=mul(inverse(a), deriv(a));
+        a.resize(n-1);
+        return integ(a);
     }
 
     vi exp(vi a)
     {
-        int n=a.size();
+        int n=a.size(), m=(a.size()+1)>>1;
         if(n==1) return {1};
-        vi b=Polynomial::exp(vi(a.begin(), a.begin()+((n+1)>>1)));
+        vi b=Polynomial::exp(vi(a.begin(), a.begin()+m));
         b.resize(n);
         vi c=ln(b);
         init(n<<1);
@@ -152,7 +150,7 @@ namespace Polynomial {
         return b;
     }
 
-    vi qpow(vi a, int k)
+    vi pow(vi a, int k)
     {
         int n=a.size();
         vi b=ln(a);
@@ -162,16 +160,7 @@ namespace Polynomial {
     }
 }
 
-int n, m;
-
 int main()
 {
-    scanf("%d%d", &n, &m);
-    n++, m++;
-    vi a(n), b(m);
-    vi c=Polynomial::div(a, b);
-    vi d=Polynomial::mod(a, b);
-    for(int e: c) printf("%d ", e);
-    printf("\n");
-    for(int e: d) printf("%d ", e);
+    
 }
