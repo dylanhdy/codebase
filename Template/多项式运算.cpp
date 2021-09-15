@@ -86,9 +86,8 @@ namespace Polynomial {
         int n=a.size(), m=b.size();
         reverse(a.begin(), a.end());
         reverse(b.begin(), b.end());
-        a.resize(n-m+1), b.resize(n-m+1);
-        b=inv(b);
-        a=mul(a, b);
+        a.resize(n-m+1); b.resize(n-m+1);
+        b=inv(b); a=mul(a, b);
         a.resize(n-m+1);
         reverse(a.begin(), a.end());
         return a;
