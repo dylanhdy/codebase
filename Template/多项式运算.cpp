@@ -66,11 +66,11 @@ namespace Polynomial {
         return a;
     }
 
-    vi inverse(vi a)
+    vi inv(vi a)
     {
         int n=a.size(), m=(a.size()+1)>>1;
         if(n==1) return {qpow(a[0], P-2)};
-        vi b=inverse(vi(a.begin(), a.begin()+m));
+        vi b=inv(vi(a.begin(), a.begin()+m));
         init(n<<1);
         a.resize(1<<bit), b.resize(1<<bit);
         ntt(a, 1), ntt(b, 1);
@@ -87,7 +87,7 @@ namespace Polynomial {
         reverse(a.begin(), a.end());
         reverse(b.begin(), b.end());
         a.resize(n-m+1), b.resize(n-m+1);
-        b=inverse(b);
+        b=inv(b);
         a=mul(a, b);
         a.resize(n-m+1);
         reverse(a.begin(), a.end());
@@ -127,7 +127,7 @@ namespace Polynomial {
     vi ln(vi a)
     {
         int n=a.size();
-        a=mul(inverse(a), deriv(a));
+        a=mul(inv(a), deriv(a));
         a.resize(n-1);
         return integ(a);
     }
