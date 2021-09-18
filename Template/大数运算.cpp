@@ -65,10 +65,3 @@ string div(string a, int b)//高精度a除以单精度b
         if(r[i]!='0') {p=i; break;}  
     return r.substr(p);  
 }
-
-int main()
-{
-    string a, b;
-    cin>>a>>b;
-    cout<<mul(a, b)<<endl;
-}
