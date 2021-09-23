@@ -17,7 +17,7 @@ constexpr int P(998244353), G(3), IG(332748118);
 
 inline int add(int x, int y) {return x+y<P?x+y:x+y-P;}
 inline int sub(int x, int y) {return x>=y?x-y:x-y+P;}
-inline int qpow(int x, int y)
+inline int qpow(int x, int y=P-2)
 {
     int num=1;
     for(; y; y>>=1, x=1LL*x*x%P)
