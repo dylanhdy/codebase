@@ -68,8 +68,8 @@ namespace Polynomial {
 
     vi inv(vi a)
     {
-        int n=a.size(), m=(a.size()+1)>>1;
-        if(n==1) return {qpow(a[0], P-2)};
+        int n=a.size(), m=(n+1)>>1;
+        if(n==1) return {qpow(a[0])};
         vi b=inv(vi(a.begin(), a.begin()+m));
         init(n<<1);
         a.resize(1<<bit); b.resize(1<<bit);
@@ -77,8 +77,7 @@ namespace Polynomial {
         for(int i=0; i<1<<bit; ++i)
             b[i]=1LL*(2+P-1LL*a[i]*b[i]%P)*b[i]%P;
         ntt(b, -1);
-        b.resize(n);
-        return b;
+        return vi(b.begin(), b.begin()+n);
     }
 
     vi div(vi a, vi b)

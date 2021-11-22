@@ -1,10 +1,18 @@
 #include <cstdio>
 #include <algorithm>
+#include <cmath>
+#include <map>
 #include <cstring>
+#include <queue>
 #include <vector>
 #include <iostream>
+#include <stack>
 #include <array>
-#define MAXN 32005
+#define LD long double
+#define MAXN 500005
+#define MP make_pair
+#define PB push_back
+#define INF 0x3f3f3f3f
 #define sz(x) int((x).size())
 #define all(x) begin(x), end(x)
 using namespace std;
@@ -29,6 +37,7 @@ Mod qpow(Mod b, ll e) {
     return res;
 }
 
+int k, m;
 vc<Mod> inv(MAXN), fac(MAXN), ifac(MAXN);
 
 void init()
@@ -145,7 +154,6 @@ vc<Mod> polyLn (vc<Mod> &a) {
     return {b.begin(), b.begin() + sz(a)};
 }
 
-// initialize array inv
 vc<Mod> polyExp (vc<Mod> &a) {
     if (a.empty()) return {};
     vc<Mod> b{1}, ib{1};
@@ -179,60 +187,30 @@ vc<Mod> polyExp (vc<Mod> &a) {
 }
 
 vc<Mod> polyPow (vc<Mod> &a, ll k) {
-    vc<Mod> b = polyLn(a);
+    auto b = polyLn(a);
     for (Mod &e: b) e *= k;
     return polyExp(b);
 }
 
-// f[0]=P-1 && a[n]=\sum{f[i]*a[n-i]}
-int recurrence(vc<Mod> f, vc<Mod> a, ll m)
-{
-    int k=a.size(), n=1<<(32-__builtin_clz(2*k-2));
-    vc<Mod> g=polyInv(vc<Mod>(f.begin(), f.begin()+k-1));
-    reverse(all(f));
-    g.resize(n), f.resize(n);
-    ntt(g), ntt(f);
-    auto combine = [&](vc<Mod> a, vc<Mod> b) -> vc<Mod> {
-        Mod iv = md - (md - 1) / n;
-        vc<Mod> c(n), d(n);
-        a=conv(a, b);
-        copy(a.rbegin(), a.rbegin()+k-1, c.begin());
-        ntt(c);
-        for (int i=0; i<n; ++i) d[-i&(n-1)]=c[i]*g[i]*iv;
-        ntt(d);
-        copy(d.rend()-k+1, d.rend(), c.begin());
-        fill(c.begin()+k-1, c.end(), 0);
-        ntt(c);
-        for (int i=0; i<n; ++i) d[-i&(n-1)]=c[i]*f[i]*iv;
-        ntt(d);
-        for(int i=0; i<k; ++i) a[i]-=d[i];
-        return {a.begin(), a.begin()+k};
-    };
-    vc<Mod> b(k), c(k);
-    b[0]=1, c[1]=1;
-    for(; m; m>>=1) {
-        if(m&1) b=combine(b, c);
-        c=combine(c, c);
-    }
-    Mod ans;
-    for(int i=0; i<k; ++i) ans+=a[i]*b[i];
-    return ans.x;
-}
-
 int main()
 {
-    int m, k;
-    cin>>m>>k;
-    vc<Mod> a(k), f(k+1);
-    f[0]=Mod(md-1);
-    for(int i=1, tmp; i<=k; ++i) {
-        cin>>tmp;
-        f[i]=Mod((tmp%md+md)%md);
+    scanf("%d%d", &k, &m);
+    init();
+    // 自然数幂和 f
+    vc<Mod> up(m+1), down(m+1);
+    for(int i=1, tmp=k+1; i<=m+1; ++i) {
+        up[i-1]=ifac[i]*tmp;
+        down[i-1]=ifac[i];
+        tmp=1ll*tmp*(k+1)%md;
     }
-    for(int i=0, tmp; i<k; ++i) {
-        cin>>tmp;
-        a[i]=Mod((tmp%md+md)%md);
+    vc<Mod> f=conv(up, polyInv(down));
+    // 生成函数 f
+    f.resize(m+1);  f[0]=0;
+    for(int i=1; i<=m; ++i) {
+        if(i&1) f[i]*=fac[i-1];
+        else f[i]*=Mod(0)-fac[i-1];
     }
-    cout<<recurrence(f, a, m);
+    f=polyExp(f);
+    for(int i=1; i<=m; ++i) printf("%lld\n", (fac[i]*f[i]).x);
     return 0;
 }
