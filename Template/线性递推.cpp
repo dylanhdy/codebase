@@ -4,7 +4,6 @@
 #include <vector>
 #include <iostream>
 #include <array>
-#define MAXN 32005
 #define sz(x) int((x).size())
 #define all(x) begin(x), end(x)
 using namespace std;
@@ -29,14 +28,13 @@ Mod qpow(Mod b, ll e) {
     return res;
 }
 
-vc<Mod> inv(MAXN), fac(MAXN), ifac(MAXN);
+vc<Mod> inv(LIM), fac(LIM), ifac(LIM);
 
 void init()
 {
-    int n=sz(inv);
     inv[0]=inv[1]=ifac[0]=fac[0]=1;
-    for(int i=2; i<n; ++i) inv[i]=inv[md%i]*(md-md/i);
-    for(int i=1; i<n; ++i) {
+    for(int i=2; i<LIM; ++i) inv[i]=inv[md%i]*(md-md/i);
+    for(int i=1; i<LIM; ++i) {
         ifac[i]=ifac[i-1]*inv[i];
         fac[i]=fac[i-1]*i;
     }
@@ -126,6 +124,7 @@ vc<Mod> deri (vc<Mod> a) {
     return a;
 }
 
+// initialize array inv
 vc<Mod> inte (vc<Mod> a) {
     for (int i = sz(a) - 1; i >= 1; --i) a[i] = a[i - 1] * inv[i];
     a[0] = 0;
@@ -145,7 +144,6 @@ vc<Mod> polyLn (vc<Mod> &a) {
     return {b.begin(), b.begin() + sz(a)};
 }
 
-// initialize array inv
 vc<Mod> polyExp (vc<Mod> &a) {
     if (a.empty()) return {};
     vc<Mod> b{1}, ib{1};
@@ -184,7 +182,6 @@ vc<Mod> polyPow (vc<Mod> &a, ll k) {
     return polyExp(b);
 }
 
-// f[0]=P-1 && a[n]=\sum{f[i]*a[n-i]}
 int recurrence(vc<Mod> f, vc<Mod> a, ll m)
 {
     int k=a.size(), n=1<<(32-__builtin_clz(2*k-2));
@@ -219,6 +216,7 @@ int recurrence(vc<Mod> f, vc<Mod> a, ll m)
     return ans.x;
 }
 
+// f[0]=P-1 且有递推关系 a[n]=\sum_i^k f[i]*a[n-i]
 int main()
 {
     int m, k;
@@ -233,6 +231,6 @@ int main()
         cin>>tmp;
         a[i]=Mod((tmp%md+md)%md);
     }
-    cout<<recurrence(f, a, m);
+    // a[m] 值为 recurrence(f, a, m)
     return 0;
 }

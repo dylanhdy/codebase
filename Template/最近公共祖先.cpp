@@ -53,6 +53,6 @@ int main()
     dfs(1, 0);
     for(int i=1; i<=19; ++i)
         for(int j=1; j<=n; ++j) f[j][i]=f[f[j][i-1]][i-1];
-//lca(x,y) 为 x,y 的最近公共祖先
+    //lca(x,y) 为 x,y 的最近公共祖先
     return 0;
 }
