@@ -12,7 +12,7 @@
 #define INF 0x3f3f3f3f
 using namespace std;
 
-int n, tot=1, fail[MAXN], t[MAXN][26], num[MAXN];
+int n, tot, fail[MAXN], t[MAXN][26], num[MAXN];
 char s2[MAXN], s1[MAXN];  //s1 文本串，s2 模式串
 
 queue<int> q;
@@ -20,7 +20,7 @@ vector<int> vec[MAXN];
 
 void insert(char *s, int id)
 {
-    int len=strlen(s), p=1;
+    int len=strlen(s), p=0;
     for(int i=0; i<len; i++) {
         int ch=s[i]-'a';
         if(!t[p][ch]) t[p][ch]=++tot;
@@ -32,7 +32,7 @@ void insert(char *s, int id)
 void getfail()
 {
     for(int i=0; i<26; i++)
-        if(t[1][i]) fail[t[1][i]]=1, q.push(t[1][i]);
+        if(t[0][i]) fail[t[0][i]]=0, q.push(t[0][i]);
     while(!q.empty()) {
         int x=q.front(); q.pop();
         for(int i=0; i<26; i++) {
@@ -48,7 +48,7 @@ void getfail()
 
 void solve(char *s)
 {
-    int len=strlen(s), p=1;
+    int len=strlen(s), p=0;
     for(int i=0; i<len; i++) {
         int ch=s[i]-'a';
         p=t[p][ch];

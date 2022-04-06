@@ -18,7 +18,7 @@ int mu[MAXN], phi[MAXN]; //莫比乌斯函数和欧拉函数
 
 void sieve(int lim)
 {
-    //phi[i]=mu[i]=1;
+    //phi[1]=mu[1]=1;
     for(int i=2; i<=lim; ++i) {
         if(!vis[i]) pri[++cnt]=i; // phi[i]=i-1, mu[i]=-1;
         for(int j=1; j<=cnt && pri[j]*i<=lim; ++j) {
@@ -29,10 +29,9 @@ void sieve(int lim)
                 mu[pri[j]*i]=0;
                 phi[i*pri[j]]=pri[j]*phi[i];
                 break;
-            } else {
-                mu[pri[j]*i]=-mu[i];
-                phi[i*pri[j]]=(pri[j]-1)*phi[i];
             }
+            mu[pri[j]*i]=-mu[i];
+            phi[i*pri[j]]=(pri[j]-1)*phi[i];
             */ 
         }
     }
