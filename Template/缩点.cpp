@@ -25,11 +25,9 @@ void tarjan(int x)
     dfn[x]=low[x]=++cnt;
     sta.push(x);
     ins[x]=1;
-    for(int i=0; i<g1[x].size(); ++i)
-    {
+    for(int i=0; i<g1[x].size(); ++i) {
         int to=g1[x][i];
-        if(!dfn[to])
-        {
+        if(!dfn[to]) {
             tarjan(to);
             low[x]=min(low[x], low[to]);
         }
@@ -39,11 +37,11 @@ void tarjan(int x)
     if(low[x]==dfn[x])
     {
         tot++;
-        while(!sta.empty() && dfn[sta.top()]>=dfn[x])
-        {
+        while(true) {
             int top=sta.top(); sta.pop();
             ins[top]=0;
             id[top]=tot;
+            if(top==x) break;
         }
     }
 }

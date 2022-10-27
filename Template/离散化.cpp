@@ -13,23 +13,18 @@
 #define INF 0x3f3f3f3f
 using namespace std;
 
-int n, cnt, a[MAXN], b[MAXN], temp[MAXN*2], suba[MAXN], subb[MAXN];
+int n, a[MAXN];
+vector<int> sub;
 
 int main()
 {
     scanf("%d", &n);
-    for(int i=1; i<=n; ++i)
-    {
-        scanf("%d%d", &a[i], &b[i]);
-        temp[i*2-1]=a[i], temp[2*i]=b[i];
+    for(int i=1; i<=n; ++i) {
+        scanf("%d", &a[i]);
+        sub.push_back(a[i]);
     }
-    sort(temp+1, temp+2*n+1);
-    cnt=unique(temp+1, temp+2*n+1)-temp-1;
+    sort(sub.begin(), sub.end());
+    sub.erase(unique(sub.begin(), sub.end()), sub.end());
     for(int i=1; i<=n; ++i)
-    {
-        suba[i]=lower_bound(temp+1, temp+cnt+1, a[i])-temp;
-        subb[i]=lower_bound(temp+1, temp+cnt+1, b[i])-temp;
-    }
-    // suba subb 离散化后数组
-    return 0;
+        a[i]=lower_bound(sub.begin(), sub.end(), a[i])-sub.begin()+1;
 }
