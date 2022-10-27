@@ -68,6 +68,17 @@ vc<Mod> conv(vc<Mod> a, vc<Mod> b) {
 int n;
 vc<Mod> f, g;
 
+vc<Mod> solve(int l, int r)
+{
+if(l==r) return vec[l];
+/* 找重心分治
+int mid=l, sum1=0, sum2=sz(vec[mid]);
+for(int i=l; i<=r; ++i) sum1+=sz(vec[l]);
+while(mid+1<r && sum2+sz(vec[mid+1])<=sum1/2) sum2+=sz(vec[++mid]); */
+int mid=(l+r)/2;
+return conv(solve(l, mid), solve(mid+1, r));
+}
+
 void divide(int l, int r)
 {
     if(l==r) return;
