@@ -1,2 +1,2 @@
 # code base
-Some code
+Code for competitive programming
